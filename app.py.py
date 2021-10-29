@@ -59,7 +59,7 @@ def admin():
 	password = st.sidebar.text_input("Enter a password", type="password", key='pass')
 	st.session_state.login = st.sidebar.checkbox('Log In')
 	if st.session_state.login:
-	 	if username.split('@')[-1] == "gmail.com" and password == "sharia":
+	 	if username.split('@')[-1] == "gmail.com" and password == system_pass:
 	 		col1,col2,col3 = st.columns((2,0.1,2))
 	 		start_date=col1.date_input('From')
 	 		col2.write(" ")
