@@ -131,7 +131,7 @@ def admin():
 		 			col4.write(f'''Regestration Date    ''')
 		 			col5.write(f'{m[11]}')
 		 			col4.write(f'''Birth Date    ''')
-		 			col5.write(f'm[12]')
+		 			col5.write(f'{m[12]}')
 		 			col4.write(f'''Gender''')
 		 			col5.write(m[13])
 		 			if s=='In Progress':
