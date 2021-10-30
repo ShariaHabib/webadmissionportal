@@ -4,7 +4,18 @@ import mysql.connector as mysql
 from db_connection import get_database_connection
 from sqlalchemy import create_engine
 from uuid import uuid1
+PAGE_CONFIG = {"page_title":"Admission-Portal","page_icon":"🎓","layout":"centered","initial_sidebar_state":"auto"}
+st.set_page_config(**PAGE_CONFIG)
 st.title("Diploma in Data Science Admission Portal")
+st.markdown(
+    """
+    <style>
+    .sidebar .sidebar-content {
+        background: url("https://images.unsplash.com/photo-1547190027-9156686aa2f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 # def main():
 	
 # 	if op == "Admin":
@@ -55,90 +66,92 @@ cursor,db = get_database_connection()
 
 
 def admin():
+	# https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80
+	
+	st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://images.unsplash.com/photo-1547190027-9156686aa2f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 	username = st.sidebar.text_input('Username', 'Enter Your E-mail', key='user')
 	password = st.sidebar.text_input("Enter a password", type="password", key='pass')
 	st.session_state.login = st.sidebar.checkbox('Log In')
 	if st.session_state.login:
-	 	if username.split('@')[-1] == "gmail.com" and password == "admin@123":
-	 		col1,col2,col3 = st.columns((2,0.1,2))
+	 	if username.split('@')[-1] == "gmail.com" and password == "sharia":
+	 		st.subheader("Logged as Admin")
+	 		col1,col2,col3= st.columns((2,0.1,2))
 	 		start_date=col1.date_input('From')
 	 		col2.write(" ")
 	 		col2.write(" ")
 	 		col2.write(" ")
 	 		col2.write("-")
 	 		end_date=col3.date_input('To')
-	 		query = f'''Select * from studentinfo where reg_date between '{start_date}'and'{end_date}' '''
+	 		radiobutt=col1.radio('',('Accpeted','Rejected','In Progress'))
+	 		if radiobutt=='Rejected':
+	 			s = 'Rejected'
+	 		elif radiobutt=='Accpeted':
+	 			s = 'Accpeted'
+	 		else:
+	 			s = 'In Progress'
+	 		query = f'''Select * from studentinfo where reg_date between '{start_date}'and'{end_date}' and status='{s}' '''
 	 		cursor.execute(query)
 	 		tables = cursor.fetchall()
+	 		j=1
 	 		for m in tables:
-	 			col1.write(f"Name                ")
-	 			# col.write(":")
-	 			col3.write(m[1])
-	 			col1.write(f'''Father's Name    ''')
-	 			# col.write(":")
-	 			col3.write(m[2])
-	 			col1.write(f'''Mother's Name    ''')
-	 			# col.write(":")
-	 			col3.write(m[3])
-	 			col1.write(f'''Present Address    ''')
-	 			# col.write(":")
-	 			col3.write(m[4])
-	 			col1.write(f'''Permanent Address    ''')
-	 			# col.write(":")
-	 			col3.write(m[5])
-	 			col1.write(f'''Contact    ''')
-	 			# col.write(":")
-	 			col3.write(m[6])
-	 			col1.write(f'''Email     ''')
-	 			# col.write(":")
-	 			col3.write(m[7])
-	 			col1.write(f'''GPA    ''')
-	 			# col.write(":")
-	 			col3.write(m[8])
-	 			col1.write(f'''Religion    ''')
-	 			# col.write(":")
-	 			col3.write(m[9])
-	 			col1.write(f'''Nationality    ''')
-	 			# col.write(":")
-	 			col3.write(m[10])
-	 			col1.write(f'''Regestration Date    ''')
-	 			# col.write(":")
-	 			col3.write(m[11])
-	 			col1.write(f'''Birth Date    ''')
-	 			# col.write(":")
-	 			col3.write(m[12])
-	 			col1.write(f'''Gender''')
-	 			# col.write(":")
-	 			col3.write(m[13])
-	 			col1.write(" ")
-	 			col3.write(" ")
-	 			col1.write(" ")
-	 			col3.write(" ")
-	 			ac_button=col1.button("Accept",key=m[0])
-	 			reject_button=col3.button("Reject",key=m[0])
-	 			col1.write(" ")
-	 			col3.write(" ")
-	 			col1.write(" ")
-	 			col3.write(" ")
-	 			col1.write(" ")
-	 			col3.write(" ")
-	 			# col3.write(" ")
-	 			# col3.write(" ")
-	 			# col3.write(" ")
-	 			# col3.write(" ")
-	 			# col3.write(" ")
-	 			# col3.write(" ")
-	 			str = "Accpeted"
-	 			if ac_button:
-	 				update_query = f'''Update studentinfo set status='Accpeted' where id = '{m[0]}' '''
-	 				cursor.execute(update_query)
-	 				db.commit()
-	 				database = cursor.fetchall()
-	 				st.balloons()
-	 			if reject_button:
-	 				update_query = f'''Update studentinfo set status='Rejected' where id = '{m[0]}' '''
-	 				cursor.execute(update_query)
-	 				db.commit()
+	 			with st.container():
+		 			col4,col5 = st.columns((2,2))
+		 			col4.subheader(f'Student Details --->')
+	 				
+	 				col5.subheader(f"{j} ")
+	 				j=j+1
+		 			col4.write(f"Name                ")
+		 			col5.write(m[1])
+		 			col4.write(f'''Father's Name    ''')
+		 			col5.write(m[2])
+		 			col4.write(f'''Mother's Name    ''')
+		 			col5.write(m[3])
+		 			col4.write(f'''Present Address    ''')
+		 			col5.write(m[4])
+		 			col4.write(f'''Permanent Address    ''')
+		 			col5.write(m[5])
+		 			col4.write(f'''Contact    ''')
+		 			col5.write(m[6])
+		 			col4.write(f'''Email     ''')
+		 			col5.write(m[7])
+		 			col4.write(f'''GPA    ''')
+		 			col5.write(m[8])
+		 			col4.write(f'''Religion    ''')
+		 			col5.write(m[9])
+		 			col4.write(f'''Nationality    ''')
+		 			col5.write(m[10])
+		 			col4.write(f'''Regestration Date    ''')
+		 			col5.write(f'{m[11]}')
+		 			col4.write(f'''Birth Date    ''')
+		 			col5.write(f'm[12]')
+		 			col4.write(f'''Gender''')
+		 			col5.write(m[13])
+		 			if s=='In Progress':
+		 				with st.container():
+		 					col7,col8 = st.columns((0.3,2))
+			 				ac_button=col7.button("Accept",key=m[0])
+			 				reject_button=col7.button("Reject",key=m[0])
+				 			str = "Accpeted"
+				 			if ac_button:
+				 				col8.success("Accpeted")
+				 				update_query = f'''Update studentinfo set status='Accpeted' where id = '{m[0]}' '''
+				 				cursor.execute(update_query)
+				 				db.commit()
+				 				database = cursor.fetchall()
+				 				st.balloons()
+				 			if reject_button:
+				 				col8.error("Rejected")
+				 				update_query = f'''Update studentinfo set status='Rejected' where id = '{m[0]}' '''
+				 				cursor.execute(update_query)
+				 				db.commit()
 
 	 	else:
 	 		st.sidebar.warning('Wrong Credintials')
@@ -146,6 +159,16 @@ def admin():
 
 def show_details():
 	with st.form(key='show_details'):
+		st.subheader("Student Information")
+		st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 		search_id = st.text_input("Enter Your ID")
 		if(st.form_submit_button('Search')):
 				query = f'''select id,student_name,fathers_name,mothers_name,present_address,permanent_address,contact_no,email,gpa, 
@@ -202,6 +225,16 @@ def show_details():
 						st.warning('Sorry, not available.')	
 
 def student_reg():
+	st.subheader("Student Regestration")
+	st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://images.unsplash.com/photo-1625535069703-a67ae00bd6de?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1332&q=80")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 	with st.form(key='student_reg'):
 		
 		student_name = st.text_input("Name")
@@ -236,6 +269,16 @@ def student_reg():
 					
 
 def check_stat():
+	st.subheader("Status Check...")
+	st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 	search_id = st.text_input('Give your id')
 	search_button = st.button('Search')
 	if search_button:
@@ -243,25 +286,58 @@ def check_stat():
 		cursor.execute(query)
 		# db.commit()
 		database = cursor.fetchall()
+		f=False
 		for i in database:
-			st.write("Your request is ",i[0])
+			if i[0]=='In Progress':
+				f=True
+				st.info(f"Your request is '{i[0]}'")
+			elif i[0]=='Accpeted':
+				f=True
+				st.success(f"Your request is '{i[0]}'")
+			elif i[0]=='Rejected':
+				f=True
+				st.error(f"Your request is '{i[0]}'")
+		if f==False:
+			st.warning("Wrong Input")
+
+def forget_pass():
+	st.subheader(" ")
+	st.subheader(" ")
+	st.subheader(" ")
+	st.text_input("Give your E-mail")
+	st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://images.unsplash.com/photo-1553451166-232112bda6f6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1172&q=80")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 
 def main():
-    # cols2.write('A real-life project of CSE-3532 course work')
-    op = st.sidebar.selectbox('',('--Select One--','Admin','Student Registration','Show Student Details','Check status'))
-    if op=="Admin":
-    	admin()
-    if op=="Student Registration":
-    	student_reg()
-    if op=='Show Student Details':
-    	show_details()
-    if op=='Check status':
-    	check_stat()
+	op = st.sidebar.selectbox('',('--Select One--','Admin','Student Registration','Show Student Details','Check status','Forget Code'))
+	st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://images.unsplash.com/photo-1559311648-874c28a0b7c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1147&q=80")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
+	if op=="Admin":
+		admin()
+	if op=="Student Registration":
+		student_reg()
+	if op=='Show Student Details':
+		show_details()
+	if op=='Check status':
+		check_stat()
+	if op=='Forget Code':
+		forget_pass()
 
 
 	    
 if __name__ == '__main__':
 	main()
-
-
-
